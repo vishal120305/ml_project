@@ -10,7 +10,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-
+from src.utils import save_object
 
 @dataclass
 class DataTransformationConfig:
@@ -25,14 +25,15 @@ class DataTransformation:
     def get_data_transformer_object(self):
         try:
             numerical_features = ['reading_score', 'writing_score']
-            categorical_features = ['gender', 'race/ethnicity', 'parental level of education', 'lunch', 'test preparation course']
+            categorical_features = ['gender', 'race_ethnicity', 'parental_level_of_education', 'lunch', 'test_preparation_course']
             numerical_transformer = Pipeline(steps=[
                 ('imputer', SimpleImputer(strategy='mean')),
                 ('scaler', StandardScaler())
             ])
             categorical_transformer = Pipeline(steps=[
                 ('imputer', SimpleImputer(strategy='most_frequent')),
-                ('onehot', OneHotEncoder(handle_unknown='ignore'))
+                ('onehot', OneHotEncoder(handle_unknown='ignore')),
+                ('scaler', StandardScaler(with_mean=False))
             ])
             preprocessor = ColumnTransformer(
                 transformers=[
@@ -40,6 +41,8 @@ class DataTransformation:
                     ('cat', categorical_transformer, categorical_features)
                 ]
             )
+            logging.info("Numerical and categorical transformation pipelines created")
+            logging.info("Data transformation object created")
             return preprocessor
         except Exception as e:
             log_error(e)
@@ -64,6 +67,10 @@ class DataTransformation:
             train_arr = np.c_[input_feature_train_arr, np.array(target_feature_train_df)]
             test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
             logging.info(f"Saved preprocessing object.")
+            save_object(
+                file_path=self.data_transformation_config.preprocessor_obj_file_path,
+                obj=preprocessor
+            )
             return (
                 train_arr,
                 test_arr,

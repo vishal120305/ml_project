@@ -10,6 +10,9 @@ from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 import numpy as np
+from src.components.data_transformations import DataTransformation
+from src.utils import save_object
+from src.components.data_transformations import DataTransformationConfig
 
 @dataclass
 class DataIngestionConfig:
@@ -51,3 +54,5 @@ if __name__ == "__main__":
     obj = DataIngestion()
     train_data, test_data = obj.initiate_data_ingestion()
  
+    data_transformation = DataTransformation()
+    data_transformation.initiate_data_transformation(train_data, test_data)
