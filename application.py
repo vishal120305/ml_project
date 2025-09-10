@@ -37,13 +37,6 @@ def predict_datapoint():
         results=predict_pipeline.predict(pred_df)
         return render_template('home.html', results=results[0])
     
-    predictions = []
-    if request.method == 'POST':
-        data = request.json
-        # Preprocess the data
-        # Make predictions using the trained model
-        # Return the predictions as a JSON response
-    return jsonify(predictions)
 
 if __name__ == '__main__':
     app.run(debug=True)
