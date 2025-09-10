@@ -3,4 +3,11 @@ numpy
 seaborn
 scikit-learn
 matplotlib
+flask
+gunicorn
+xgboost
+catboost
+lightgbm
+decision-tree
+random-forest
 #-e .

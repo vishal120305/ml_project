@@ -1,5 +1,6 @@
 import pickle
 import os
+import sys
 from flask import Flask, request, jsonify, render_template
 import numpy as np
 import pandas as pd
@@ -7,6 +8,9 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from src.pipeline.predict_pipeline import PredictPipeline, CustomData
 
 app = Flask(__name__)
+@app.route('/python_version', methods=['GET'])
+def python_version():
+    return sys.version
 
 @app.route('/')
 def home():
