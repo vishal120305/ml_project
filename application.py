@@ -2,12 +2,15 @@ import pickle
 import os
 import sys
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS, cross_origin
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from src.pipeline.predict_pipeline import PredictPipeline, CustomData
 
 app = Flask(__name__)
+CORS(app)
+
 @app.route('/python_version', methods=['GET'])
 def python_version():
     return sys.version
@@ -36,6 +39,7 @@ def predict_datapoint():
         predict_pipeline=PredictPipeline()
         results=predict_pipeline.predict(pred_df)
         return render_template('home.html', results=results[0])
+        
     
 
 if __name__ == '__main__':
